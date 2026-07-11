@@ -29,6 +29,11 @@
         "boot_firmware": { "type": ["string", "null"] },
         "cdt_firmware": { "type": ["string", "null"] },
         "uboot_config": { "type": ["string", "null"] },
+        "soc_kernel_modules": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "packagegroup-machine-essential.bb's RRECOMMENDS:${PN}-qcom-<soc_family>-soc entries — the SoC-family-level kernel modules pulled in for every board on this SoC. Populate only when scaffolding a genuinely new soc_family (no existing packagegroup-machine-essential.bb entry yet); null when the board reuses an existing soc_family whose ${PN}-qcom-<soc_family>-soc entry is already present (the common case for a new board on an existing SoC)."
+        },
         "ci_includes": { "type": "array", "items": { "type": "string" }, "default": ["ci/base.yml"] },
         "packagegroup": {
           "type": ["object", "null"],
