@@ -20,6 +20,10 @@ machine_creation:
   boot_firmware: firmware-qcom-boot-shikra
   cdt_firmware: firmware-qcom-cdt-shikra
   uboot_config: null
+  soc_kernel_modules:
+  - kernel-module-dispcc-shikra
+  - kernel-module-gpucc-shikra
+  - kernel-module-pwrseq-qcom-wcn
   ci_includes:
   - ci/base.yml
   packagegroup:
