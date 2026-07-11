@@ -1,6 +1,7 @@
 machine: shikra-sample
 layer: meta-qcom
 soc: cq2390
+soc_family: shikra
 reference_board: shikra-evk
 machine_creation:
   machine_features_add:
