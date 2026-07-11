@@ -50,7 +50,7 @@ machine_creation:
     pv: "00036"
     bootbinaries_sha256sum: df2437405516034fb2d33585c8436891f7fb765e92022256364b4cf609089d0e
     license: LICENSE.qcom-2
-    license_md5sum: 165287851294f2fb8ac8cbc5e24b02b0
+    license_md5sum: 6e1bae7ef13289c332a27b917fb49764
     qcom_boot_img_subdir: shikra
     notes: null
   firmware_cdt:
