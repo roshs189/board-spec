@@ -29,7 +29,36 @@
         "boot_firmware": { "type": ["string", "null"] },
         "cdt_firmware": { "type": ["string", "null"] },
         "uboot_config": { "type": ["string", "null"] },
-        "ci_includes": { "type": "array", "items": { "type": "string" }, "default": ["ci/base.yml"] }
+        "ci_includes": { "type": "array", "items": { "type": "string" }, "default": ["ci/base.yml"] },
+        "packagegroup": {
+          "type": ["object", "null"],
+          "description": "Firmware/DSP package lists for recipes-bsp/packagegroups/packagegroup-<machine>.bb. Null only when the board reuses an existing packagegroup (e.g. a firmware/config variant of another machine) instead of needing its own.",
+          "properties": {
+            "firmware_packages": { "type": "array", "items": { "type": "string" }, "description": "Unconditional RRECOMMENDS/RDEPENDS entries for the -firmware package, e.g. linux-firmware-qcom-<soc_family>-compute" },
+            "hexagon_dsp_packages": { "type": "array", "items": { "type": "string" }, "description": "RDEPENDS entries for the -hexagon-dsp-binaries package, one per DSP-bearing DTB variant" },
+            "optional_feature_packages": {
+              "type": "object",
+              "description": "Packages gated by bb.utils.contains(_any)('DISTRO_FEATURES', ...) — null a key when that feature has no gated package on this board",
+              "properties": {
+                "wifi": { "type": ["string", "null"] },
+                "bluetooth": { "type": ["string", "null"] },
+                "opengl_vulkan_opencl": { "type": ["string", "null"] }
+              }
+            }
+          }
+        },
+        "rt_isolation": {
+          "type": ["object", "null"],
+          "description": "RT CPU isolation block. Null/needed=false for boards without an RT kernel config.",
+          "properties": {
+            "needed": { "type": "boolean" },
+            "qcom_rt_cpu": { "type": ["string", "null"] },
+            "qcom_irqaff": { "type": ["string", "null"] },
+            "qcom_rcu_nocbs": { "type": ["string", "null"] },
+            "qcom_rcu_expedited": { "type": ["string", "null"] },
+            "qcom_cpuidle_off": { "type": ["string", "null"] }
+          }
+        }
       }
     },
 
