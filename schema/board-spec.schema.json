@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Board Spec",
+  "type": "object",
+  "required": ["machine", "layer", "soc", "reference_board", "machine_creation", "partition_conf"],
+  "properties": {
+    "machine": { "type": "string", "description": "MACHINE name, kebab-case, matches conf/machine/<machine>.conf" },
+    "layer": { "type": "string", "enum": ["meta-qcom", "meta-qcom-3rdparty"] },
+    "soc": { "type": "string" },
+    "reference_board": { "type": "string", "description": "Existing machine this spec was modeled on" },
+
+    "machine_creation": {
+      "type": "object",
+      "required": ["kernel_devicetree", "boot_files_subdir", "partition_files_subdir"],
+      "properties": {
+        "machine_features_add": { "type": "array", "items": { "type": "string" } },
+        "machine_features_set": { "type": "array", "items": { "type": "string" } },
+        "kernel_devicetree": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "cdt_file": { "type": ["string", "null"] },
+        "boot_files_subdir": { "type": "string" },
+        "partition_files_subdir": {
+          "type": "string",
+          "description": "Must equal partitions/<machine>/<partition_conf.storage_type> so qcom-partition-conf's do_deploy discovers the artifacts"
+        },
+        "boot_firmware": { "type": ["string", "null"] },
+        "cdt_firmware": { "type": ["string", "null"] },
+        "uboot_config": { "type": ["string", "null"] },
+        "ci_includes": { "type": "array", "items": { "type": "string" }, "default": ["ci/base.yml"] }
+      }
+    },
+
+    "partition_conf": {
+      "type": "object",
+      "required": ["storage_type", "disk", "partitions", "contents_xml_in"],
+      "properties": {
+        "storage_type": { "type": "string", "enum": ["emmc", "nand", "ufs", "nvme", "spinor"] },
+        "disk": { "type": "string", "description": "Verbatim --disk line" },
+        "partitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["lun", "name", "size", "type_guid", "delta"],
+            "properties": {
+              "lun": { "type": ["integer", "null"] },
+              "name": { "type": "string" },
+              "size": { "type": "string" },
+              "type_guid": { "type": "string" },
+              "filename": { "type": ["string", "null"] },
+              "attributes": { "type": ["string", "null"] },
+              "readonly": { "type": ["boolean", "null"] },
+              "sparse": { "type": ["boolean", "null"] },
+              "delta": { "type": "string", "enum": ["copy", "new"] },
+              "notes": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "contents_xml_in": {
+          "type": "object",
+          "properties": {
+            "reuse_reference_unchanged": { "type": "boolean", "default": false },
+            "product_name": { "type": ["string", "null"] },
+            "chip_id_default": { "type": ["string", "null"] },
+            "additional_chip_ids": { "type": "array", "items": { "type": "string" } },
+            "build_flavors": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    }
+  }
+}
