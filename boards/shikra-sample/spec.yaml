@@ -44,6 +44,21 @@ machine_creation:
     qcom_rcu_nocbs: null
     qcom_rcu_expedited: null
     qcom_cpuidle_off: null
+  firmware_boot:
+    fw_artifactory: softwarecenter.qualcomm.com/nexus/generic/product/chip/tech-package/SHIKRA_bootbinaries.1.0/shikra_bootbinaries.1.0-test-device-public
+    bootbinaries: SHIKRA_bootbinaries
+    pv: "00036"
+    bootbinaries_sha256sum: df2437405516034fb2d33585c8436891f7fb765e92022256364b4cf609089d0e
+    license: LICENSE.qcom-2
+    license_md5sum: 165287851294f2fb8ac8cbc5e24b02b0
+    qcom_boot_img_subdir: shikra
+    notes: null
+  firmware_cdt:
+    cdt_artifactory: null
+    download_path: CQ2390/cdt/cq2390-itp.zip
+    downloadfilename_prefix: cq2390-itp
+    sha256sum: acc8b39a9a8ccde5e04b762e9e4c7bbddf66f0420a5d32ed69a5a74761699f7b
+    qcom_cdt_subdir: shikra
 partition_conf:
   storage_type: emmc
   disk: --disk --type=emmc --size=137438953472 --write-protect-boundary=0 --sector-size-in-bytes=512 --grow-last-partition
