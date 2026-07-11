@@ -23,16 +23,19 @@ machine_creation:
   ci_includes:
   - ci/base.yml
   packagegroup:
+    compatible_machine: (qcom)
     firmware_packages:
     - linux-firmware-qcom-shikra-compute
     - linux-firmware-qcom-shikra-audio
     - linux-firmware-qcom-shikra-modem
     - linux-firmware-qcom-shikra-qupv3fw
     - linux-firmware-qcom-vpu
+    firmware_packages_dependency_type: RRECOMMENDS
     hexagon_dsp_packages:
     - hexagon-dsp-binaries-qcom-shikra-cqm-evk-cdsp
     - hexagon-dsp-binaries-qcom-shikra-cqs-evk-cdsp
     - hexagon-dsp-binaries-qcom-shikra-iqs-evk-cdsp
+    hexagon_dsp_packages_dependency_type: RDEPENDS
     optional_feature_packages:
       wifi: null
       bluetooth: linux-firmware-qca-wcn3950
