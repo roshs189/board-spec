@@ -34,8 +34,11 @@
           "type": ["object", "null"],
           "description": "Firmware/DSP package lists for recipes-bsp/packagegroups/packagegroup-<machine>.bb. Null only when the board reuses an existing packagegroup (e.g. a firmware/config variant of another machine) instead of needing its own.",
           "properties": {
-            "firmware_packages": { "type": "array", "items": { "type": "string" }, "description": "Unconditional RRECOMMENDS/RDEPENDS entries for the -firmware package, e.g. linux-firmware-qcom-<soc_family>-compute" },
-            "hexagon_dsp_packages": { "type": "array", "items": { "type": "string" }, "description": "RDEPENDS entries for the -hexagon-dsp-binaries package, one per DSP-bearing DTB variant" },
+            "compatible_machine": { "type": ["string", "null"], "description": "COMPATIBLE_MACHINE regex override on the packagegroup recipe, e.g. \"(qcom)\". Null when the recipe doesn't set this variable at all (the common case — most packagegroup-<machine>.bb recipes omit it)." },
+            "firmware_packages": { "type": "array", "items": { "type": "string" }, "description": "Entries for the -firmware package (dependency type given by firmware_packages_dependency_type), e.g. linux-firmware-qcom-<soc_family>-compute" },
+            "firmware_packages_dependency_type": { "type": "string", "enum": ["RDEPENDS", "RRECOMMENDS"], "default": "RRECOMMENDS", "description": "Whether firmware_packages are wired up via RDEPENDS or RRECOMMENDS on ${PN}-firmware. Most boards use RRECOMMENDS; check the reference board's recipe rather than assuming." },
+            "hexagon_dsp_packages": { "type": "array", "items": { "type": "string" }, "description": "Entries for the -hexagon-dsp-binaries package (dependency type given by hexagon_dsp_packages_dependency_type), one per DSP-bearing DTB variant" },
+            "hexagon_dsp_packages_dependency_type": { "type": "string", "enum": ["RDEPENDS", "RRECOMMENDS"], "default": "RDEPENDS", "description": "Whether hexagon_dsp_packages are wired up via RDEPENDS or RRECOMMENDS on ${PN}-hexagon-dsp-binaries. Most boards (qcm6490-idp, sa8775p-ride) use RDEPENDS; some outliers (kaanapali-mtp) use RRECOMMENDS for both package sets — check the reference board's recipe rather than assuming." },
             "optional_feature_packages": {
               "type": "object",
               "description": "Packages gated by bb.utils.contains(_any)('DISTRO_FEATURES', ...) — null a key when that feature has no gated package on this board",
