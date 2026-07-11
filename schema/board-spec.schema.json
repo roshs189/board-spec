@@ -58,6 +58,33 @@
             "qcom_rcu_expedited": { "type": ["string", "null"] },
             "qcom_cpuidle_off": { "type": ["string", "null"] }
           }
+        },
+        "firmware_boot": {
+          "type": ["object", "null"],
+          "description": "Download facts for recipes-bsp/firmware-boot/firmware-qcom-boot-<boot_firmware-suffix>[_<pv>].bb + matching .inc, needed to scaffold the recipe when it doesn't yet exist in the consumer's tree. Null only when boot_firmware is null (no boot-firmware recipe at all, e.g. vendor-flashed-independently boards) or the recipe is a firmware/config variant reusing another board's recipe verbatim.",
+          "required": ["fw_artifactory", "bootbinaries", "pv", "bootbinaries_sha256sum"],
+          "properties": {
+            "fw_artifactory": { "type": "string", "description": "FW_ARTIFACTORY value — artifactory path (without scheme) the bootbinaries zip is fetched from" },
+            "bootbinaries": { "type": "string", "description": "BOOTBINARIES value — zip basename prefix, also the unpacked subdir name under UNPACKDIR" },
+            "pv": { "type": "string", "description": "Recipe PV — becomes the _<pv>.bb filename suffix and the zip's version segment in SRC_URI" },
+            "bootbinaries_sha256sum": { "type": "string" },
+            "license": { "type": ["string", "null"], "description": "LICENSE value, e.g. LICENSE.qcom-2. Null if the board's boot-firmware recipe uses a different LIC_FILES_CHKSUM shape than the qcom-2-inside-zip pattern — say so in notes." },
+            "license_md5sum": { "type": ["string", "null"], "description": "LIC_FILES_CHKSUM md5 for file://${UNPACKDIR}/${BOOTBINARIES}/LICENSE.qcom-2.txt. Null if licensing is sourced differently (e.g. a separately-downloaded LICENSE.txt with its own sha256sum) — explain in notes." },
+            "qcom_boot_img_subdir": { "type": "string", "description": "QCOM_BOOT_IMG_SUBDIR value, normally equal to machine_creation.boot_files_subdir" },
+            "notes": { "type": ["string", "null"] }
+          }
+        },
+        "firmware_cdt": {
+          "type": ["object", "null"],
+          "description": "Download facts for recipes-bsp/firmware-boot/firmware-qcom-cdt-<cdt_firmware-suffix>.bb, needed to scaffold the recipe when it doesn't yet exist in the consumer's tree. Null only when cdt_firmware is null.",
+          "required": ["download_path", "sha256sum"],
+          "properties": {
+            "cdt_artifactory": { "type": ["string", "null"], "description": "CDT_ARTIFACTORY override, if this board doesn't use firmware-qcom-cdt-common.inc's shared default (artifacts.codelinaro.org/artifactory/codelinaro-le/Qualcomm_Linux)" },
+            "download_path": { "type": "string", "description": "Path segment appended after CDT_ARTIFACTORY in SRC_URI, e.g. CQ2390/cdt/cq2390-itp.zip" },
+            "downloadfilename_prefix": { "type": ["string", "null"], "description": "Prefix before _${PV}.zip in SRC_URI's downloadfilename= param, e.g. cq2390-itp" },
+            "sha256sum": { "type": "string" },
+            "qcom_cdt_subdir": { "type": "string", "description": "QCOM_CDT_SUBDIR value, normally equal to machine_creation.boot_files_subdir" }
+          }
         }
       }
     },
