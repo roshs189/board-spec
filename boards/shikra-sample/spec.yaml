@@ -14,6 +14,19 @@ machine_creation:
   - qcom/shikra-iqs-evk.dtb
   - qcom/shikra-cqm-evk-imx577-camera.dtbo
   - qcom/shikra-iqs-evk-imx577-camera.dtbo
+  fit_dtb_compatible:
+  - compatible: qcom,shikracqm-itp
+    dtbs:
+    - shikra-cqm-evk
+    - shikra-cqm-evk-imx577-camera
+  - compatible: qcom,shikracqs-itp
+    dtbs:
+    - shikra-cqs-evk
+    - shikra-cqm-evk-imx577-camera
+  - compatible: qcom,shikraiqs-itp
+    dtbs:
+    - shikra-iqs-evk
+    - shikra-iqs-evk-imx577-camera
   cdt_file: cdt_cq2390_itp_0.2.0
   boot_files_subdir: shikra
   partition_files_subdir: partitions/shikra-sample/emmc
