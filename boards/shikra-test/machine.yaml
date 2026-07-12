@@ -1,4 +1,4 @@
-machine: shikra-sample
+machine: shikra-test
 layer: meta-qcom
 soc: cq2390
 soc_family: shikra
@@ -29,7 +29,7 @@ machine_creation:
     - shikra-iqs-evk-imx577-camera
   cdt_file: cdt_cq2390_itp_0.2.0
   boot_files_subdir: shikra
-  partition_files_subdir: partitions/shikra-sample/emmc
+  partition_files_subdir: partitions/shikra-test/emmc
   boot_firmware: firmware-qcom-boot-shikra
   cdt_firmware: firmware-qcom-cdt-shikra
   uboot_config: null
