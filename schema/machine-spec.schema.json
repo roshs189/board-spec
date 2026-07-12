@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Board Spec",
+  "title": "Machine Spec",
   "type": "object",
-  "required": ["machine", "layer", "soc", "reference_board", "machine_creation", "partition_conf"],
+  "required": ["machine", "layer", "soc", "reference_board", "machine_creation"],
   "properties": {
     "machine": { "type": "string", "description": "MACHINE name, kebab-case, matches conf/machine/<machine>.conf" },
     "layer": { "type": "string", "enum": ["meta-qcom", "meta-qcom-3rdparty"] },
@@ -41,7 +41,7 @@
         "boot_files_subdir": { "type": "string" },
         "partition_files_subdir": {
           "type": "string",
-          "description": "Must equal partitions/<machine>/<partition_conf.storage_type> so qcom-partition-conf's do_deploy discovers the artifacts"
+          "description": "Must equal partitions/<machine>/<storage_type> (storage_type lives in this board's partition spec) so qcom-partition-conf's do_deploy discovers the artifacts"
         },
         "boot_firmware": { "type": ["string", "null"] },
         "cdt_firmware": { "type": ["string", "null"] },
@@ -109,44 +109,6 @@
             "downloadfilename_prefix": { "type": ["string", "null"], "description": "Prefix before _${PV}.zip in SRC_URI's downloadfilename= param, e.g. cq2390-itp" },
             "sha256sum": { "type": "string" },
             "qcom_cdt_subdir": { "type": "string", "description": "QCOM_CDT_SUBDIR value, normally equal to machine_creation.boot_files_subdir" }
-          }
-        }
-      }
-    },
-
-    "partition_conf": {
-      "type": "object",
-      "required": ["storage_type", "disk", "partitions", "contents_xml_in"],
-      "properties": {
-        "storage_type": { "type": "string", "enum": ["emmc", "nand", "ufs", "nvme", "spinor"] },
-        "disk": { "type": "string", "description": "Verbatim --disk line" },
-        "partitions": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": ["lun", "name", "size", "type_guid", "delta"],
-            "properties": {
-              "lun": { "type": ["integer", "null"] },
-              "name": { "type": "string" },
-              "size": { "type": "string" },
-              "type_guid": { "type": "string" },
-              "filename": { "type": ["string", "null"] },
-              "attributes": { "type": ["string", "null"] },
-              "readonly": { "type": ["boolean", "null"] },
-              "sparse": { "type": ["boolean", "null"] },
-              "delta": { "type": "string", "enum": ["copy", "new"] },
-              "notes": { "type": ["string", "null"] }
-            }
-          }
-        },
-        "contents_xml_in": {
-          "type": "object",
-          "properties": {
-            "reuse_reference_unchanged": { "type": "boolean", "default": false },
-            "product_name": { "type": ["string", "null"] },
-            "chip_id_default": { "type": ["string", "null"] },
-            "additional_chip_ids": { "type": "array", "items": { "type": "string" } },
-            "build_flavors": { "type": "array", "items": { "type": "string" } }
           }
         }
       }
