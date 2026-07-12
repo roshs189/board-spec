@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Board Spec",
+  "title": "Machine Spec",
   "type": "object",
-  "required": ["machine", "layer", "soc", "reference_board", "machine_creation", "partition_conf"],
+  "required": ["machine", "layer", "soc", "reference_board", "machine_creation"],
   "properties": {
     "machine": { "type": "string", "description": "MACHINE name, kebab-case, matches conf/machine/<machine>.conf" },
     "layer": { "type": "string", "enum": ["meta-qcom", "meta-qcom-3rdparty"] },
@@ -20,11 +20,28 @@
         "machine_features_add": { "type": "array", "items": { "type": "string" } },
         "machine_features_set": { "type": "array", "items": { "type": "string" } },
         "kernel_devicetree": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "fit_dtb_compatible": {
+          "type": ["array", "null"],
+          "description": "Maps compatible strings to kernel_devicetree entries for conf/machine/include/fit-dtb-compatible.inc's FIT_DTB_COMPATIBLE[...] flags. do_generate_qcom_fitimage uses these to emit the FIT image's configurations node; without a matching entry for a DTB combo, the FIT image still builds (only a bb.note is logged) but with zero conf-N nodes, and UEFI's ParseFitDt then has nothing to match at boot and falls back to a broken default config. Null only when every kernel_devicetree entry is already covered by an existing FIT_DTB_COMPATIBLE entry for this soc_family (e.g. a firmware/config variant reusing another board's DTBs verbatim) — do not leave null just because the entries haven't been checked.",
+          "items": {
+            "type": "object",
+            "required": ["compatible", "dtbs"],
+            "properties": {
+              "compatible": { "type": "string", "description": "Compatible string UEFI's ParseFitDt matches at boot, e.g. qcom,shikracqm-itp. Becomes the FIT_DTB_COMPATIBLE[...] flag name with ',' encoded as '_'." },
+              "dtbs": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1,
+                "description": "Base DTB stem followed by any overlay stem(s), space-separated in the .inc file's flag value — matching kernel_devicetree entries minus the .dtb/.dtbo suffix, e.g. [\"shikra-cqm-evk\", \"shikra-cqm-evk-imx577-camera\"]"
+              }
+            }
+          }
+        },
         "cdt_file": { "type": ["string", "null"] },
         "boot_files_subdir": { "type": "string" },
         "partition_files_subdir": {
           "type": "string",
-          "description": "Must equal partitions/<machine>/<partition_conf.storage_type> so qcom-partition-conf's do_deploy discovers the artifacts"
+          "description": "Must equal partitions/<machine>/<storage_type> (storage_type lives in this board's partition spec) so qcom-partition-conf's do_deploy discovers the artifacts"
         },
         "boot_firmware": { "type": ["string", "null"] },
         "cdt_firmware": { "type": ["string", "null"] },
@@ -92,44 +109,6 @@
             "downloadfilename_prefix": { "type": ["string", "null"], "description": "Prefix before _${PV}.zip in SRC_URI's downloadfilename= param, e.g. cq2390-itp" },
             "sha256sum": { "type": "string" },
             "qcom_cdt_subdir": { "type": "string", "description": "QCOM_CDT_SUBDIR value, normally equal to machine_creation.boot_files_subdir" }
-          }
-        }
-      }
-    },
-
-    "partition_conf": {
-      "type": "object",
-      "required": ["storage_type", "disk", "partitions", "contents_xml_in"],
-      "properties": {
-        "storage_type": { "type": "string", "enum": ["emmc", "nand", "ufs", "nvme", "spinor"] },
-        "disk": { "type": "string", "description": "Verbatim --disk line" },
-        "partitions": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": ["lun", "name", "size", "type_guid", "delta"],
-            "properties": {
-              "lun": { "type": ["integer", "null"] },
-              "name": { "type": "string" },
-              "size": { "type": "string" },
-              "type_guid": { "type": "string" },
-              "filename": { "type": ["string", "null"] },
-              "attributes": { "type": ["string", "null"] },
-              "readonly": { "type": ["boolean", "null"] },
-              "sparse": { "type": ["boolean", "null"] },
-              "delta": { "type": "string", "enum": ["copy", "new"] },
-              "notes": { "type": ["string", "null"] }
-            }
-          }
-        },
-        "contents_xml_in": {
-          "type": "object",
-          "properties": {
-            "reuse_reference_unchanged": { "type": "boolean", "default": false },
-            "product_name": { "type": ["string", "null"] },
-            "chip_id_default": { "type": ["string", "null"] },
-            "additional_chip_ids": { "type": "array", "items": { "type": "string" } },
-            "build_flavors": { "type": "array", "items": { "type": "string" } }
           }
         }
       }

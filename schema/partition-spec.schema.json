@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Partition Spec",
+  "type": "object",
+  "required": ["machine", "partition_conf"],
+  "properties": {
+    "machine": { "type": "string", "description": "MACHINE name, kebab-case — must match the branch name and the machine spec's machine field" },
+
+    "partition_conf": {
+      "type": "object",
+      "required": ["storage_type", "disk", "partitions", "contents_xml_in"],
+      "properties": {
+        "storage_type": { "type": "string", "enum": ["emmc", "nand", "ufs", "nvme", "spinor"] },
+        "disk": { "type": "string", "description": "Verbatim --disk line" },
+        "partitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["lun", "name", "size", "type_guid", "delta"],
+            "properties": {
+              "lun": { "type": ["integer", "null"] },
+              "name": { "type": "string" },
+              "size": { "type": "string" },
+              "type_guid": { "type": "string" },
+              "filename": { "type": ["string", "null"] },
+              "attributes": { "type": ["string", "null"] },
+              "readonly": { "type": ["boolean", "null"] },
+              "sparse": { "type": ["boolean", "null"] },
+              "delta": { "type": "string", "enum": ["copy", "new"] },
+              "notes": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "contents_xml_in": {
+          "type": "object",
+          "properties": {
+            "reuse_reference_unchanged": { "type": "boolean", "default": false },
+            "product_name": { "type": ["string", "null"] },
+            "chip_id_default": { "type": ["string", "null"] },
+            "additional_chip_ids": { "type": "array", "items": { "type": "string" } },
+            "build_flavors": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    }
+  }
+}
