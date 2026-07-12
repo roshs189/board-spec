@@ -20,6 +20,23 @@
         "machine_features_add": { "type": "array", "items": { "type": "string" } },
         "machine_features_set": { "type": "array", "items": { "type": "string" } },
         "kernel_devicetree": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "fit_dtb_compatible": {
+          "type": ["array", "null"],
+          "description": "Maps compatible strings to kernel_devicetree entries for conf/machine/include/fit-dtb-compatible.inc's FIT_DTB_COMPATIBLE[...] flags. do_generate_qcom_fitimage uses these to emit the FIT image's configurations node; without a matching entry for a DTB combo, the FIT image still builds (only a bb.note is logged) but with zero conf-N nodes, and UEFI's ParseFitDt then has nothing to match at boot and falls back to a broken default config. Null only when every kernel_devicetree entry is already covered by an existing FIT_DTB_COMPATIBLE entry for this soc_family (e.g. a firmware/config variant reusing another board's DTBs verbatim) — do not leave null just because the entries haven't been checked.",
+          "items": {
+            "type": "object",
+            "required": ["compatible", "dtbs"],
+            "properties": {
+              "compatible": { "type": "string", "description": "Compatible string UEFI's ParseFitDt matches at boot, e.g. qcom,shikracqm-itp. Becomes the FIT_DTB_COMPATIBLE[...] flag name with ',' encoded as '_'." },
+              "dtbs": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1,
+                "description": "Base DTB stem followed by any overlay stem(s), space-separated in the .inc file's flag value — matching kernel_devicetree entries minus the .dtb/.dtbo suffix, e.g. [\"shikra-cqm-evk\", \"shikra-cqm-evk-imx577-camera\"]"
+              }
+            }
+          }
+        },
         "cdt_file": { "type": ["string", "null"] },
         "boot_files_subdir": { "type": "string" },
         "partition_files_subdir": {
