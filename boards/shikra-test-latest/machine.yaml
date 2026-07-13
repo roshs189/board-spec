@@ -1,0 +1,87 @@
+machine: shikra-test-latest
+layer: meta-qcom
+soc: cq2390
+soc_family: shikra
+reference_board: null
+machine_creation:
+  machine_features_add:
+  - efi
+  - pci
+  - phone
+  kernel_devicetree:
+  - qcom/shikra-cqm-evk.dtb
+  - qcom/shikra-cqs-evk.dtb
+  - qcom/shikra-iqs-evk.dtb
+  - qcom/shikra-cqm-evk-imx577-camera.dtbo
+  - qcom/shikra-iqs-evk-imx577-camera.dtbo
+  fit_dtb_compatible:
+  - compatible: qcom,shikracqm-itp
+    dtbs:
+    - shikra-cqm-evk
+    - shikra-cqm-evk-imx577-camera
+  - compatible: qcom,shikracqs-itp
+    dtbs:
+    - shikra-cqs-evk
+    - shikra-iqs-evk-imx577-camera
+  - compatible: qcom,shikraiqs-itp
+    dtbs:
+    - shikra-iqs-evk
+    - shikra-iqs-evk-imx577-camera
+  cdt_file: cdt_cq2390_itp_0.2.0
+  boot_files_subdir: shikra
+  partition_files_subdir: partitions/shikra-test-latest/emmc
+  boot_firmware: firmware-qcom-boot-shikra
+  cdt_firmware: firmware-qcom-cdt-shikra
+  uboot_config: null
+  soc_kernel_modules:
+  - kernel-module-dispcc-shikra
+  - kernel-module-gpucc-shikra
+  - kernel-module-pwrseq-qcom-wcn
+  ci_includes:
+  - ci/base.yml
+  packagegroup:
+    compatible_machine: (qcom)
+    firmware_packages:
+    - linux-firmware-qcom-shikra-compute
+    - linux-firmware-qcom-shikra-audio
+    - linux-firmware-qcom-shikra-modem
+    - linux-firmware-qcom-shikra-qupv3fw
+    - linux-firmware-qcom-vpu
+    firmware_packages_dependency_type: RRECOMMENDS
+    hexagon_dsp_packages:
+    - hexagon-dsp-binaries-qcom-shikra-cqm-evk-cdsp
+    - hexagon-dsp-binaries-qcom-shikra-cqs-evk-cdsp
+    - hexagon-dsp-binaries-qcom-shikra-iqs-evk-cdsp
+    hexagon_dsp_packages_dependency_type: RDEPENDS
+    optional_feature_packages:
+      wifi: null
+      bluetooth: linux-firmware-qca-wcn3950
+      opengl_vulkan_opencl: linux-firmware-qcom-adreno-a702 linux-firmware-qcom-shikra-adreno
+  rt_isolation:
+    needed: false
+    qcom_rt_cpu: null
+    qcom_irqaff: null
+    qcom_rcu_nocbs: null
+    qcom_rcu_expedited: null
+    qcom_cpuidle_off: null
+  firmware_boot:
+    fw_artifactory: softwarecenter.qualcomm.com/nexus/generic/product/chip/tech-package/SHIKRA_bootbinaries.1.0/shikra_bootbinaries.1.0-test-device-public
+    bootbinaries: SHIKRA_bootbinaries
+    pv: "00036"
+    bootbinaries_sha256sum: df2437405516034fb2d33585c8436891f7fb765e92022256364b4cf609089d0e
+    license: LICENSE.qcom-2
+    license_md5sum: 6e1bae7ef13289c332a27b917fb49764
+    qcom_boot_img_subdir: shikra
+    notes: >-
+      Data-entry error found 2026-07-11 (see board-spec commit ad79c7d):
+      165287851294f2fb8ac8cbc5e24b02b0 was copied from a since-fixed
+      recipe. Confirmed value is 6e1bae7ef13289c332a27b917fb49764, shared
+      by every other LICENSE.qcom-2 board. Don't trust a hardcoded md5 in
+      docs/notes without cross-checking a board-spec entry or the real
+      fetched file.
+  firmware_cdt:
+    cdt_artifactory: null
+    download_path: CQ2390/cdt/cq2390-itp.zip
+    downloadfilename_prefix: cq2390-itp
+    sha256sum: acc8b39a9a8ccde5e04b762e9e4c7bbddf66f0420a5d32ed69a5a74761699f7b
+    qcom_cdt_subdir: shikra
