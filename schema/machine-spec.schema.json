@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Machine Spec",
   "type": "object",
-  "required": ["machine", "layer", "soc", "reference_board", "machine_creation"],
+  "required": ["machine", "layer", "soc", "machine_creation"],
   "properties": {
     "machine": { "type": "string", "description": "MACHINE name, kebab-case, matches conf/machine/<machine>.conf" },
     "layer": { "type": "string", "enum": ["meta-qcom", "meta-qcom-3rdparty"] },
@@ -11,7 +11,7 @@
       "type": ["string", "null"],
       "description": "meta-qcom's internal SoC codename used to name the shared conf/machine/include/qcom-<soc_family>.inc file and SOC_FAMILY variable (e.g. shikra, glymur, hamoa, kaanapali, purwa, qcm2290). Often differs from `soc` (the literal chip part number) and cannot be inferred from either the machine or board name. Null only when this is a genuinely new SoC family with no existing qcom-<soc_family>.inc yet — the consumer must scaffold one using a sensible codename."
     },
-    "reference_board": { "type": "string", "description": "Existing machine this spec was modeled on" },
+    "reference_board": { "type": ["string", "null"], "description": "Existing machine this spec was modeled on. Null when no single reference board applies (e.g. facts converted from a different source than a board-spec-authored template)." },
 
     "machine_creation": {
       "type": "object",
