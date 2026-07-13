@@ -6,13 +6,19 @@ Source of truth for Qualcomm Yocto BSP board specs, consumed by the
 
 ## Layout
 
-- `schema/board-spec.schema.json` — JSON Schema all board specs validate against (this branch).
-- Each board lives on its own branch, named after the machine, at `boards/<machine>/spec.yaml`.
+- `schema/machine-spec.schema.json` — JSON Schema a board's `machine.yaml`
+  validates against (this branch).
+- `schema/partition-spec.schema.json` — JSON Schema a board's
+  `partition.yaml` validates against (this branch).
+- Each board lives on its own branch, named after the machine, at
+  `boards/<machine>/machine.yaml` and `boards/<machine>/partition.yaml`.
 
 ## Adding a new board
 
 1. Branch off `main`: `git checkout -b <machine>`.
-2. Add `boards/<machine>/spec.yaml` following `schema/board-spec.schema.json`.
+2. Add `boards/<machine>/machine.yaml` following
+   `schema/machine-spec.schema.json`, and `boards/<machine>/partition.yaml`
+   following `schema/partition-spec.schema.json`.
 3. Open a PR against `<machine>` (not `main`) for review.
 4. Once merged, the `board-spec-mcp` server picks it up via `refresh_specs`.
 
