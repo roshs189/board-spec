@@ -2,7 +2,7 @@ machine: shikra-test-new
 layer: meta-qcom
 soc: cq2390
 soc_family: shikra
-reference_board: shikra-evk
+reference_board: null
 machine_creation:
   machine_features_add:
   - efi
@@ -22,7 +22,7 @@ machine_creation:
   - compatible: qcom,shikracqs-itp
     dtbs:
     - shikra-cqs-evk
-    - shikra-cqm-evk-imx577-camera
+    - shikra-iqs-evk-imx577-camera
   - compatible: qcom,shikraiqs-itp
     dtbs:
     - shikra-iqs-evk
