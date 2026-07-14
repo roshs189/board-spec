@@ -1,8 +1,8 @@
 machine: iq10-rrd
 layer: meta-qcom
-soc: sa8797p
+soc: nord
 soc_family: null
-reference_board: kaanapali-mtp
+reference_board: null
 machine_creation:
   machine_features_add:
   - efi
@@ -10,17 +10,61 @@ machine_creation:
   kernel_devicetree:
   - qcom/iq10-rrd.dtb
   - qcom/sa8797p-ride.dtb
-  fit_dtb_compatible: null
-  cdt_file: cdt_iq10_rrd
-  boot_files_subdir: iq10-rrd
+  fit_dtb_compatible:
+  - compatible: qcom,qam8x97p-qam
+    dtbs:
+    - iq10-rrd
+  - compatible: qcom,nord-qam
+    dtbs:
+    - iq10-rrd
+  cdt_file: cdt_nord_ridesx_0.1.0
+  boot_files_subdir: nord
   partition_files_subdir: partitions/iq10-rrd/ufs
   boot_firmware: firmware-qcom-boot-nord
   cdt_firmware: firmware-qcom-cdt-nord
   uboot_config: null
-  soc_kernel_modules: null
+  soc_kernel_modules:
+  - kernel-module-ath12k
+  - kernel-module-camcc-nord
+  - kernel-module-dispcc-nord
+  - kernel-module-gpucc-nord
+  - kernel-module-pmic-glink
+  - kernel-module-pmic-glink-altmode
+  - kernel-module-pwrseq-qcom-wcn
+  - kernel-module-videocc-nord
   ci_includes:
   - ci/base.yml
-  packagegroup: null
-  rt_isolation: null
-  firmware_boot: null
-  firmware_cdt: null
+  packagegroup:
+    compatible_machine: null
+    firmware_packages:
+    - linux-firmware-qcom-vpu
+    firmware_packages_dependency_type: RRECOMMENDS
+    hexagon_dsp_packages:
+    - hexagon-dsp-binaries-qcom-shikra-iqs-evk-cdsp
+    hexagon_dsp_packages_dependency_type: RDEPENDS
+    optional_feature_packages:
+      wifi: linux-firmware-ath12k-wcn7850
+      bluetooth: linux-firmware-qca-wcn7850
+      opengl_vulkan_opencl: linux-firmware-qcom-adreno-a702 linux-firmware-qcom-shikra-adreno
+  rt_isolation:
+    needed: false
+    qcom_rt_cpu: null
+    qcom_irqaff: null
+    qcom_rcu_nocbs: null
+    qcom_rcu_expedited: null
+    qcom_cpuidle_off: null
+  firmware_boot:
+    fw_artifactory: https://artifactory-las.qualcomm.com/artifactory/lint-lv-local/nord-test/NORD_bootbinaries.zip
+    bootbinaries: NORD_bootbinaries
+    pv: '00001'
+    bootbinaries_sha256sum: 47ba0c1ada86e75cbb03309a1210fce224544298c95e620f6e69ae1bec4e9aba
+    license: null
+    license_md5sum: null
+    qcom_boot_img_subdir: nord
+    notes: null
+  firmware_cdt:
+    cdt_artifactory: null
+    download_path: https://artifactory-las.qualcomm.com/artifactory/lint-lv-local/nord-test/NORD_RIDESX_CDT.zip
+    downloadfilename_prefix: null
+    sha256sum: 645f21677f27f6c2ca897183ef8a5a82e2181ba83e4e6cf06a07e45906130a9e
+    qcom_cdt_subdir: nord
