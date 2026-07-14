@@ -22,7 +22,7 @@ machine_creation:
   - compatible: qcom,shikracqs-itp
     dtbs:
     - shikra-cqs-evk
-    - shikra-iqs-evk-imx577-camera
+    - shikra-cqm-evk-imx577-camera
   - compatible: qcom,shikraiqs-itp
     dtbs:
     - shikra-iqs-evk
