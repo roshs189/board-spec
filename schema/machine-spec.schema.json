@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Machine Spec",
+  "type": "object",
+  "required": ["machine", "layer", "soc", "machine_creation"],
+  "properties": {
+    "machine": { "type": "string", "description": "MACHINE name, kebab-case, matches conf/machine/<machine>.conf" },
+    "layer": { "type": "string", "enum": ["meta-qcom", "meta-qcom-3rdparty"] },
+    "soc": { "type": "string", "description": "Chip/silicon part number, e.g. cq2390, qcs6490 — NOT necessarily the same as soc_family" },
+    "soc_family": {
+      "type": ["string", "null"],
+      "description": "meta-qcom's internal SoC codename used to name the shared conf/machine/include/qcom-<soc_family>.inc file and SOC_FAMILY variable (e.g. shikra, glymur, hamoa, kaanapali, purwa, qcm2290). Often differs from `soc` (the literal chip part number) and cannot be inferred from either the machine or board name. Null only when this is a genuinely new SoC family with no existing qcom-<soc_family>.inc yet — the consumer must scaffold one using a sensible codename."
+    },
+    "reference_board": { "type": ["string", "null"], "description": "Existing machine this spec was modeled on. Null when no single reference board applies (e.g. facts converted from a different source than a board-spec-authored template)." },
+
+    "machine_creation": {
+      "type": "object",
+      "required": ["kernel_devicetree", "boot_files_subdir", "partition_files_subdir"],
+      "properties": {
+        "machine_features_add": { "type": "array", "items": { "type": "string" } },
+        "machine_features_set": { "type": "array", "items": { "type": "string" } },
+        "kernel_devicetree": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "fit_dtb_compatible": {
+          "type": ["array", "null"],
+          "description": "Maps compatible strings to kernel_devicetree entries for conf/machine/include/fit-dtb-compatible.inc's FIT_DTB_COMPATIBLE[...] flags. do_generate_qcom_fitimage uses these to emit the FIT image's configurations node; without a matching entry for a DTB combo, the FIT image still builds (only a bb.note is logged) but with zero conf-N nodes, and UEFI's ParseFitDt then has nothing to match at boot and falls back to a broken default config. Null only when every kernel_devicetree entry is already covered by an existing FIT_DTB_COMPATIBLE entry for this soc_family (e.g. a firmware/config variant reusing another board's DTBs verbatim) — do not leave null just because the entries haven't been checked.",
+          "items": {
+            "type": "object",
+            "required": ["compatible", "dtbs"],
+            "properties": {
+              "compatible": { "type": "string", "description": "Compatible string UEFI's ParseFitDt matches at boot, e.g. qcom,shikracqm-itp. Becomes the FIT_DTB_COMPATIBLE[...] flag name with ',' encoded as '_'." },
+              "dtbs": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1,
+                "description": "Base DTB stem followed by any overlay stem(s), space-separated in the .inc file's flag value — matching kernel_devicetree entries minus the .dtb/.dtbo suffix, e.g. [\"shikra-cqm-evk\", \"shikra-cqm-evk-imx577-camera\"]"
+              }
+            }
+          }
+        },
+        "cdt_file": { "type": ["string", "null"] },
+        "boot_files_subdir": { "type": "string" },
+        "partition_files_subdir": {
+          "type": "string",
+          "description": "Must equal partitions/<machine>/<storage_type> (storage_type lives in this board's partition spec) so qcom-partition-conf's do_deploy discovers the artifacts"
+        },
+        "boot_firmware": { "type": ["string", "null"] },
+        "cdt_firmware": { "type": ["string", "null"] },
+        "uboot_config": { "type": ["string", "null"] },
+        "soc_kernel_modules": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "packagegroup-machine-essential.bb's RRECOMMENDS:${PN}-qcom-<soc_family>-soc entries — the SoC-family-level kernel modules pulled in for every board on this SoC. Populate only when scaffolding a genuinely new soc_family (no existing packagegroup-machine-essential.bb entry yet); null when the board reuses an existing soc_family whose ${PN}-qcom-<soc_family>-soc entry is already present (the common case for a new board on an existing SoC)."
+        },
+        "ci_includes": { "type": "array", "items": { "type": "string" }, "default": ["ci/base.yml"] },
+        "packagegroup": {
+          "type": ["object", "null"],
+          "description": "Firmware/DSP package lists for recipes-bsp/packagegroups/packagegroup-<machine>.bb. Null only when the board reuses an existing packagegroup (e.g. a firmware/config variant of another machine) instead of needing its own.",
+          "properties": {
+            "compatible_machine": { "type": ["string", "null"], "description": "COMPATIBLE_MACHINE regex override on the packagegroup recipe, e.g. \"(qcom)\". Null when the recipe doesn't set this variable at all (the common case — most packagegroup-<machine>.bb recipes omit it)." },
+            "firmware_packages": { "type": "array", "items": { "type": "string" }, "description": "Entries for the -firmware package (dependency type given by firmware_packages_dependency_type), e.g. linux-firmware-qcom-<soc_family>-compute" },
+            "firmware_packages_dependency_type": { "type": "string", "enum": ["RDEPENDS", "RRECOMMENDS"], "default": "RRECOMMENDS", "description": "Whether firmware_packages are wired up via RDEPENDS or RRECOMMENDS on ${PN}-firmware. Most boards use RRECOMMENDS; check the reference board's recipe rather than assuming." },
+            "hexagon_dsp_packages": { "type": "array", "items": { "type": "string" }, "description": "Entries for the -hexagon-dsp-binaries package (dependency type given by hexagon_dsp_packages_dependency_type), one per DSP-bearing DTB variant" },
+            "hexagon_dsp_packages_dependency_type": { "type": "string", "enum": ["RDEPENDS", "RRECOMMENDS"], "default": "RDEPENDS", "description": "Whether hexagon_dsp_packages are wired up via RDEPENDS or RRECOMMENDS on ${PN}-hexagon-dsp-binaries. Most boards (qcm6490-idp, sa8775p-ride) use RDEPENDS; some outliers (kaanapali-mtp) use RRECOMMENDS for both package sets — check the reference board's recipe rather than assuming." },
+            "optional_feature_packages": {
+              "type": "object",
+              "description": "Packages gated by bb.utils.contains(_any)('DISTRO_FEATURES', ...) — null a key when that feature has no gated package on this board",
+              "properties": {
+                "wifi": { "type": ["string", "null"] },
+                "bluetooth": { "type": ["string", "null"] },
+                "opengl_vulkan_opencl": { "type": ["string", "null"] }
+              }
+            }
+          }
+        },
+        "rt_isolation": {
+          "type": ["object", "null"],
+          "description": "RT CPU isolation block. Null/needed=false for boards without an RT kernel config.",
+          "properties": {
+            "needed": { "type": "boolean" },
+            "qcom_rt_cpu": { "type": ["string", "null"] },
+            "qcom_irqaff": { "type": ["string", "null"] },
+            "qcom_rcu_nocbs": { "type": ["string", "null"] },
+            "qcom_rcu_expedited": { "type": ["string", "null"] },
+            "qcom_cpuidle_off": { "type": ["string", "null"] }
+          }
+        },
+        "firmware_boot": {
+          "type": ["object", "null"],
+          "description": "Download facts for recipes-bsp/firmware-boot/firmware-qcom-boot-<boot_firmware-suffix>[_<pv>].bb + matching .inc, needed to scaffold the recipe when it doesn't yet exist in the consumer's tree. Null only when boot_firmware is null (no boot-firmware recipe at all, e.g. vendor-flashed-independently boards) or the recipe is a firmware/config variant reusing another board's recipe verbatim.",
+          "required": ["fw_artifactory", "bootbinaries", "pv", "bootbinaries_sha256sum"],
+          "properties": {
+            "fw_artifactory": { "type": "string", "description": "FW_ARTIFACTORY value — artifactory path (without scheme) the bootbinaries zip is fetched from" },
+            "bootbinaries": { "type": "string", "description": "BOOTBINARIES value — zip basename prefix, also the unpacked subdir name under UNPACKDIR" },
+            "pv": { "type": "string", "description": "Recipe PV — becomes the _<pv>.bb filename suffix and the zip's version segment in SRC_URI" },
+            "bootbinaries_sha256sum": { "type": "string" },
+            "license": { "type": ["string", "null"], "description": "LICENSE value, e.g. LICENSE.qcom-2. Null if the board's boot-firmware recipe uses a different LIC_FILES_CHKSUM shape than the qcom-2-inside-zip pattern — say so in notes." },
+            "license_md5sum": { "type": ["string", "null"], "description": "LIC_FILES_CHKSUM md5 for file://${UNPACKDIR}/${BOOTBINARIES}/LICENSE.qcom-2.txt. Null if licensing is sourced differently (e.g. a separately-downloaded LICENSE.txt with its own sha256sum) — explain in notes." },
+            "qcom_boot_img_subdir": { "type": "string", "description": "QCOM_BOOT_IMG_SUBDIR value, normally equal to machine_creation.boot_files_subdir" },
+            "notes": { "type": ["string", "null"] }
+          }
+        },
+        "firmware_cdt": {
+          "type": ["object", "null"],
+          "description": "Download facts for recipes-bsp/firmware-boot/firmware-qcom-cdt-<cdt_firmware-suffix>.bb, needed to scaffold the recipe when it doesn't yet exist in the consumer's tree. Null only when cdt_firmware is null.",
+          "required": ["download_path", "sha256sum"],
+          "properties": {
+            "cdt_artifactory": { "type": ["string", "null"], "description": "CDT_ARTIFACTORY override, if this board doesn't use firmware-qcom-cdt-common.inc's shared default (artifacts.codelinaro.org/artifactory/codelinaro-le/Qualcomm_Linux)" },
+            "download_path": { "type": "string", "description": "Path segment appended after CDT_ARTIFACTORY in SRC_URI, e.g. CQ2390/cdt/cq2390-itp.zip" },
+            "downloadfilename_prefix": { "type": ["string", "null"], "description": "Prefix before _${PV}.zip in SRC_URI's downloadfilename= param, e.g. cq2390-itp" },
+            "sha256sum": { "type": "string" },
+            "qcom_cdt_subdir": { "type": "string", "description": "QCOM_CDT_SUBDIR value, normally equal to machine_creation.boot_files_subdir" }
+          }
+        }
+      }
+    }
+  }
+}

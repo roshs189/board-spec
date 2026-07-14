@@ -1,0 +1,26 @@
+machine: iq10-rrd
+layer: meta-qcom
+soc: sa8797p
+soc_family: null
+reference_board: kaanapali-mtp
+machine_creation:
+  machine_features_add:
+  - efi
+  - pci
+  kernel_devicetree:
+  - qcom/iq10-rrd.dtb
+  - qcom/sa8797p-ride.dtb
+  fit_dtb_compatible: null
+  cdt_file: cdt_iq10_rrd
+  boot_files_subdir: iq10-rrd
+  partition_files_subdir: partitions/iq10-rrd/ufs
+  boot_firmware: firmware-qcom-boot-nord
+  cdt_firmware: firmware-qcom-cdt-nord
+  uboot_config: null
+  soc_kernel_modules: null
+  ci_includes:
+  - ci/base.yml
+  packagegroup: null
+  rt_isolation: null
+  firmware_boot: null
+  firmware_cdt: null

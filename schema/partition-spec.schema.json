@@ -1,33 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Board Spec",
+  "title": "Partition Spec",
   "type": "object",
-  "required": ["machine", "layer", "soc", "reference_board", "machine_creation", "partition_conf"],
+  "required": ["machine", "partition_conf"],
   "properties": {
-    "machine": { "type": "string", "description": "MACHINE name, kebab-case, matches conf/machine/<machine>.conf" },
-    "layer": { "type": "string", "enum": ["meta-qcom", "meta-qcom-3rdparty"] },
-    "soc": { "type": "string" },
-    "reference_board": { "type": "string", "description": "Existing machine this spec was modeled on" },
-
-    "machine_creation": {
-      "type": "object",
-      "required": ["kernel_devicetree", "boot_files_subdir", "partition_files_subdir"],
-      "properties": {
-        "machine_features_add": { "type": "array", "items": { "type": "string" } },
-        "machine_features_set": { "type": "array", "items": { "type": "string" } },
-        "kernel_devicetree": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-        "cdt_file": { "type": ["string", "null"] },
-        "boot_files_subdir": { "type": "string" },
-        "partition_files_subdir": {
-          "type": "string",
-          "description": "Must equal partitions/<machine>/<partition_conf.storage_type> so qcom-partition-conf's do_deploy discovers the artifacts"
-        },
-        "boot_firmware": { "type": ["string", "null"] },
-        "cdt_firmware": { "type": ["string", "null"] },
-        "uboot_config": { "type": ["string", "null"] },
-        "ci_includes": { "type": "array", "items": { "type": "string" }, "default": ["ci/base.yml"] }
-      }
-    },
+    "machine": { "type": "string", "description": "MACHINE name, kebab-case — must match the branch name and the machine spec's machine field" },
 
     "partition_conf": {
       "type": "object",
