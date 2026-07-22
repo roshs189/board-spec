@@ -64,36 +64,6 @@ partition_conf:
     delta: copy
     notes: null
   - lun: 0
-    name: vbmeta_a
-    size: 64KB
-    type_guid: 4B7A15D6-322C-42AC-8110-88B7DA0C5D77
-    filename: sa8797-vbmeta.img
-    attributes: null
-    readonly: true
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 0
-    name: boot_a
-    size: 262144KB
-    type_guid: 20117F86-E985-4357-B9EE-374BC1D8487D
-    filename: sa8797-boot.img
-    attributes: triesremaining=7
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 0
-    name: system_a
-    size: 8388608KB
-    type_guid: 3A8F4F3A-4B19-44C6-ACED-EF2A4FC9AB52
-    filename: machine-image-sa8797.ext4
-    attributes: null
-    readonly: false
-    sparse: false
-    delta: copy
-    notes: null
-  - lun: 0
     name: vendor_a
     size: 524288KB
     type_guid: AF9B7EAA-6D4F-4F00-B0C1-3B210ADE2A2C
@@ -113,26 +83,6 @@ partition_conf:
     sparse: null
     delta: copy
     notes: SoC-mandated (boot ROM/XBL contract)
-  - lun: 0
-    name: persist
-    size: 131072KB
-    type_guid: A0705B0D-4F9F-4801-91CD-F62740C0F13B
-    filename: sa8797-persist.ext4
-    attributes: null
-    readonly: false
-    sparse: true
-    delta: copy
-    notes: SoC-mandated (boot ROM/XBL contract)
-  - lun: 0
-    name: userdata
-    size: 71303168KB
-    type_guid: 9D23FA91-9EF1-4867-9E18-26B7153DA21B
-    filename: sa8797-usrfs.ext4
-    attributes: null
-    readonly: false
-    sparse: true
-    delta: copy
-    notes: null
   - lun: 0
     name: lv_boot_a
     size: 98304KB
@@ -274,16 +224,6 @@ partition_conf:
     delta: copy
     notes: SoC-mandated (boot ROM/XBL contract)
   - lun: 1
-    name: multiimgoem_a
-    size: 48KB
-    type_guid: E126A436-757E-42D0-8D19-0F362F7A62B8
-    filename: oem_misc.mbn
-    attributes: system=true
-    readonly: null
-    sparse: null
-    delta: copy
-    notes: SoC-mandated (boot ROM/XBL contract)
-  - lun: 1
     name: multiimgqti_a
     size: 48KB
     type_guid: 846C6F05-EB46-4C0A-A1A3-3648EF3F9D0E
@@ -318,16 +258,6 @@ partition_conf:
     size: 516KB
     type_guid: 1FF86822-2C39-472B-B1E5-514DB3F0D3C2
     filename: tme_config.elf
-    attributes: system=true
-    readonly: null
-    sparse: null
-    delta: copy
-    notes: SoC-mandated (boot ROM/XBL contract)
-  - lun: 1
-    name: multiimgoem_bkup_a
-    size: 48KB
-    type_guid: 3E3E3ECD-C512-4F95-9144-6063826A8970
-    filename: oem_misc.mbn
     attributes: system=true
     readonly: null
     sparse: null
@@ -434,16 +364,6 @@ partition_conf:
     delta: copy
     notes: SoC-mandated (boot ROM/XBL contract)
   - lun: 2
-    name: multiimgoem_b
-    size: 48KB
-    type_guid: E126A436-757E-42D0-8D19-0F362F7A62B8
-    filename: oem_misc.mbn
-    attributes: system=true
-    readonly: null
-    sparse: null
-    delta: copy
-    notes: SoC-mandated (boot ROM/XBL contract)
-  - lun: 2
     name: multiimgqti_b
     size: 48KB
     type_guid: 846C6F05-EB46-4C0A-A1A3-3648EF3F9D0E
@@ -478,16 +398,6 @@ partition_conf:
     size: 516KB
     type_guid: 1FF86822-2C39-472B-B1E5-514DB3F0D3C2
     filename: tme_config.elf
-    attributes: system=true
-    readonly: null
-    sparse: null
-    delta: copy
-    notes: SoC-mandated (boot ROM/XBL contract)
-  - lun: 2
-    name: multiimgoem_bkup_b
-    size: 48KB
-    type_guid: 3E3E3ECD-C512-4F95-9144-6063826A8970
-    filename: oem_misc.mbn
     attributes: system=true
     readonly: null
     sparse: null
@@ -814,16 +724,6 @@ partition_conf:
     delta: copy
     notes: null
   - lun: 4
-    name: ddr_lcp_a
-    size: 64KB
-    type_guid: AD25F436-8C48-4103-B3A1-950F58BB0CB2
-    filename: ddr_lcp.elf
-    attributes: null
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 4
     name: soccp_a
     size: 3072KB
     type_guid: 7999BAF4-9E18-4073-987B-2AC661353F9F
@@ -870,16 +770,6 @@ partition_conf:
     filename: uefi_dtbs.elf
     attributes: null
     readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 4
-    name: gearvm_a
-    size: 12288KB
-    type_guid: 06EF844E-08FC-494E-89EB-396D4D6C5B27
-    filename: gearvm.mbn
-    attributes: null
-    readonly: true
     sparse: null
     delta: copy
     notes: null
@@ -1074,16 +964,6 @@ partition_conf:
     delta: copy
     notes: null
   - lun: 4
-    name: logfs
-    size: 8192KB
-    type_guid: BC0330EB-3410-4951-A617-03898DBE3372
-    filename: logfs_ufs_8mb.bin
-    attributes: system=true,dontautomount=true
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: SoC-mandated (boot ROM/XBL contract)
-  - lun: 4
     name: xbl_sc_logs
     size: 1024KB
     type_guid: F7EECB66-781A-439A-8955-70E12ED4A7A0
@@ -1124,26 +1004,6 @@ partition_conf:
     delta: copy
     notes: SoC-mandated (boot ROM/XBL contract)
   - lun: 4
-    name: quantumsdk
-    size: 40960KB
-    type_guid: B09AFFF8-70C4-4BFA-ADD2-2C7C8C5051EE
-    filename: quantumsdk.fv
-    attributes: system=true
-    readonly: null
-    sparse: null
-    delta: copy
-    notes: SoC-mandated (boot ROM/XBL contract)
-  - lun: 4
-    name: quantumfv
-    size: 1024KB
-    type_guid: 80C23C26-C3F9-4A19-BB38-1E457DACEB09
-    filename: Quantum.fv
-    attributes: null
-    readonly: true
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 4
     name: quantumcontentfv
     size: 1024KB
     type_guid: E12D830B-7F62-4F0B-B48A-8178C5BF3AC1
@@ -1178,26 +1038,6 @@ partition_conf:
     size: 8192KB
     type_guid: 54DBC0D1-7C95-435F-8A6A-FB6A63F0EA50
     filename: null
-    attributes: null
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 4
-    name: audio_cfg_a
-    size: 10240KB
-    type_guid: 8DEF429C-C2DA-4BD9-B424-1E4400B034C2
-    filename: audio_cfg.mbn
-    attributes: null
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 4
-    name: display_cfg_a
-    size: 10240KB
-    type_guid: B2AC2A57-795C-4EDF-B082-13ED5403EECF
-    filename: display_cfg.mbn
     attributes: null
     readonly: false
     sparse: null
@@ -1444,16 +1284,6 @@ partition_conf:
     delta: copy
     notes: null
   - lun: 4
-    name: qweslicstore_a
-    size: 256KB
-    type_guid: 7BAB3C93-5F73-4D02-B8CB-5B9F899D29A8
-    filename: license.bin
-    attributes: null
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 4
     name: qwesliccache
     size: 36KB
     type_guid: 7DDC813A-E88A-491A-95DC-4811A869D313
@@ -1654,16 +1484,6 @@ partition_conf:
     delta: copy
     notes: null
   - lun: 5
-    name: ddr_lcp_b
-    size: 64KB
-    type_guid: 2B098FBF-1BFF-41DA-955D-A797C0675EB4
-    filename: ddr_lcp.elf
-    attributes: null
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 5
     name: soccp_debug_b
     size: 512KB
     type_guid: 88CE4B5F-616E-4549-B875-565DAD984951
@@ -1700,16 +1520,6 @@ partition_conf:
     filename: uefi_dtbs.elf
     attributes: null
     readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 5
-    name: gearvm_b
-    size: 12288KB
-    type_guid: 4D09E70E-F349-11ED-A05B-0242AC120003
-    filename: gearvm.mbn
-    attributes: null
-    readonly: true
     sparse: null
     delta: copy
     notes: null
@@ -1840,26 +1650,6 @@ partition_conf:
     filename: null
     attributes: null
     readonly: true
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 5
-    name: audio_cfg_b
-    size: 10240KB
-    type_guid: B7BBCAAA-F47E-4EDA-8AFD-61E54BD5DDF7
-    filename: audio_cfg.mbn
-    attributes: null
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 5
-    name: display_cfg_b
-    size: 10240KB
-    type_guid: C88A20F8-CA78-4BA0-A1F9-AD00F3CCCD9B
-    filename: display_cfg.mbn
-    attributes: null
-    readonly: false
     sparse: null
     delta: copy
     notes: null
@@ -2074,16 +1864,6 @@ partition_conf:
     delta: copy
     notes: null
   - lun: 5
-    name: qweslicstore_b
-    size: 256KB
-    type_guid: 1A702852-77D3-40E6-BE75-884E0E601787
-    filename: license.bin
-    attributes: null
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 5
     name: tz_ac_config_b
     size: 512KB
     type_guid: FA5C1B9B-CED6-4ED8-8C92-97BEC5791F30
@@ -2141,36 +1921,6 @@ partition_conf:
     attributes: null
     readonly: true
     sparse: null
-    delta: copy
-    notes: null
-  - lun: 6
-    name: vbmeta_b
-    size: 64KB
-    type_guid: E904F94D-5280-4AAF-A5A2-2335783875FC
-    filename: sa8797-vbmeta.img
-    attributes: null
-    readonly: true
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 6
-    name: boot_b
-    size: 262144KB
-    type_guid: 5E591BC1-6904-45E8-81FF-BE7F59DFE5AE
-    filename: sa8797-boot.img
-    attributes: triesremaining=7
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 6
-    name: system_b
-    size: 8388608KB
-    type_guid: A1E2D677-E4D4-4B46-90E5-3E575D770B16
-    filename: machine-image-sa8797.ext4
-    attributes: null
-    readonly: false
-    sparse: false
     delta: copy
     notes: null
   - lun: 6
