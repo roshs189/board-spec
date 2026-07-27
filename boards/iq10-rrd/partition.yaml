@@ -64,16 +64,6 @@ partition_conf:
     delta: copy
     notes: null
   - lun: 0
-    name: vendor_a
-    size: 524288KB
-    type_guid: AF9B7EAA-6D4F-4F00-B0C1-3B210ADE2A2C
-    filename: null
-    attributes: null
-    readonly: false
-    sparse: null
-    delta: copy
-    notes: null
-  - lun: 0
     name: recoveryinfo
     size: 4KB
     type_guid: 7374B391-291C-49FA-ABC2-0463AB5F713F
